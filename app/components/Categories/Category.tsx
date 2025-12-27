@@ -12,21 +12,34 @@ type CategoryType = {
 interface CategoryProps {
   category: CategoryType;
   index: number;
+  isSelected?: boolean;
+  onCategoryClick?: () => void;
 }
-function Category({ category, index }: CategoryProps) {
+
+function Category({
+  category,
+  index,
+  isSelected = false,
+  onCategoryClick,
+}: CategoryProps) {
   let isLastChild = categories.length - 1 === index;
-  console.log(isLastChild);
-  const isActive = index === 0;
+  const isActive = isSelected;
   return (
     <>
       <Grid
         size={2}
+        onClick={onCategoryClick}
         sx={{
           textAlign: "center",
           py: 6,
           background: isActive ? "green" : "#fff",
           color: isActive ? "#fff" : "#000",
           position: "relative",
+          cursor: "pointer",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            background: isActive ? "green" : "#f5f5f5",
+          },
           "&::before": {
             content: "''",
             width: "1px",
