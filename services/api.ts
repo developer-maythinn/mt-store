@@ -1,4 +1,4 @@
-// services/api.ts
+
 
 import { Product, ProductResponse } from "@/types/ecommerce";
 
@@ -18,9 +18,7 @@ export const api = {
     if (!res.ok) throw new Error("Failed to fetch products");
     return res.json();
   },
-  // services/api.ts
-
-  // ... existing methods
+ 
   getProductById: async (id: string): Promise<Product> => {
     const res = await fetch(`${BASE_URL}/products/${id}`);
     if (!res.ok) throw new Error("Product not found");
