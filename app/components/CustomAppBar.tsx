@@ -15,6 +15,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useCartStore } from "@/store/useCartStore";
+import Link from "next/link";
+import { Badge } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 interface Props {
   window?: () => Window;
@@ -30,7 +34,8 @@ export default function CustomAppBar(props: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-
+  const cart = useCartStore((state) => state.cart);
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -46,6 +51,13 @@ export default function CustomAppBar(props: Props) {
           </ListItem>
         ))}
       </List>
+      <Link href="/checkout" passHref>
+        <IconButton>
+          <Badge badgeContent={totalItems} color="error">
+            <ShoppingCartIcon />
+          </Badge>
+        </IconButton>
+      </Link>
     </Box>
   );
 
@@ -79,6 +91,13 @@ export default function CustomAppBar(props: Props) {
                 {item}
               </Button>
             ))}
+            <Link href="/checkout" passHref>
+              <IconButton>
+                <Badge badgeContent={totalItems} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>
@@ -102,7 +121,6 @@ export default function CustomAppBar(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-      
     </Box>
   );
 }
