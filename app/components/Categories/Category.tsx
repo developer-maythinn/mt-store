@@ -1,4 +1,5 @@
 import { categories, categoriesImages } from "@/dummyData/data";
+import { useCategoryStore } from "@/store/useCategoryStore";
 import { Grid, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import Image from "next/image";
@@ -20,15 +21,15 @@ function Category({
   category,
   index,
   isSelected = false,
-  onCategoryClick,
 }: CategoryProps) {
   let isLastChild = categories.length - 1 === index;
-  const isActive = isSelected;
+  const { selectedCategory, setSelectedCategory } = useCategoryStore();
+  const isActive = selectedCategory === category.slug;
   return (
     <>
       <Grid
         size={2}
-        onClick={onCategoryClick}
+        
         sx={{
           textAlign: "center",
           py: 6,
@@ -65,6 +66,7 @@ function Category({
             width: 0,
           },
         }}
+        onClick={() => setSelectedCategory(category.slug)}
       >
         <Image
           src={categoriesImages[index]}

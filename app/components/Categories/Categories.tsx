@@ -1,6 +1,4 @@
 "use client";
-
-import { categories } from "@/dummyData/data";
 import React, { useState } from "react";
 import Category from "./Category";
 import {
@@ -9,17 +7,23 @@ import {
   Box,
   CircularProgress,
   Typography,
+  Skeleton,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import ProductCard from "../ProductCard";
-import { Product } from "@/types/ecommerce";
+import { CategoryType, Product } from "@/types/ecommerce";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/services/api";
+import { useCategoryStore } from "@/store/useCategoryStore";
+import { useCategories } from "@/hooks/useCategories";
 
 function Categories() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    "beauty"
-  );
+  const { selectedCategory } = useCategoryStore();
+  const {
+    data: categories,
+    isError,
+    isLoading: categoriesLoading,
+  } = useCategories();
 
   const { data: productsData, isLoading } = useQuery({
     queryKey: ["products", selectedCategory],
@@ -31,14 +35,6 @@ function Categories() {
   });
 
   const products = (productsData?.products || []) as Product[];
-
-  const handleCategoryClick = (slug: string) => {
-    if (selectedCategory === slug) {
-      setSelectedCategory(null);
-      return;
-    }
-    setSelectedCategory(slug);
-  };
 
   return (
     <>
@@ -52,47 +48,27 @@ function Categories() {
           },
         }}
       >
-        <Grid container>
-          {categories.map((category, index) => {
-            return (
-              <React.Fragment key={index}>
-                <Category
-                  category={category}
-                  index={index}
-                  isSelected={selectedCategory === category.slug}
-                  onCategoryClick={() => handleCategoryClick(category.slug)}
-                />
-              </React.Fragment>
-            );
-          })}
-        </Grid>
-
-        {selectedCategory && (
-          <Box sx={{ py: 6, px: 4 }}>
-            <Typography variant="h5" sx={{ mb: 4 }}>
-              {categories.find((c) => c.slug === selectedCategory)?.name}
-            </Typography>
-
-            {isLoading ? (
-              <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-                <CircularProgress />
-              </Box>
-            ) : products.length > 0 ? (
-              <Grid container spacing={2}>
-                {products.map((product) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
-                    <ProductCard product={product} />
-                  </Grid>
-                ))}
-              </Grid>
-            ) : (
-              <Typography color="textSecondary">
-                No products found for this category.
-              </Typography>
-            )}
-          </Box>
+        {categoriesLoading ? (
+          <Skeleton variant="rectangular" height={4} />
+        ) : (
+          <Grid container>
+            {categories
+              ?.slice(0, 6)
+              .map((category: CategoryType, index: number) => {
+                return (
+                  <React.Fragment key={index}>
+                    <Category
+                      category={category}
+                      index={index}
+                      isSelected={selectedCategory === category.slug}
+                    />
+                  </React.Fragment>
+                );
+              })}
+          </Grid>
         )}
       </Container>
+     
     </>
   );
 }

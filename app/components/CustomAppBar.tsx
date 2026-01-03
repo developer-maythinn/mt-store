@@ -36,6 +36,7 @@ export default function CustomAppBar(props: Props) {
   };
   const cart = useCartStore((state) => state.cart);
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>

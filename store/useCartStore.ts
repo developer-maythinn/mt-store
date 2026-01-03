@@ -18,9 +18,7 @@ export const useCartStore = create<CartState>()(
       addToCart: (product, quantity) =>
         set((state) => {
           const existing = state.cart.find((item) => item.id === product.id);
-          const updatedCart = existing
-            ? state.cart.map((item) =>
-                item.id === product.id
+          const updatedCart = existing ? state.cart.map((item) => item.id === product.id
                   ? { ...item, quantity: item.quantity + quantity }
                   : item
               )
@@ -29,9 +27,7 @@ export const useCartStore = create<CartState>()(
         }),
       updateQuantity: (id, type) =>
         set((state) => ({
-          cart: state.cart.map((item) =>
-            item.id === id
-              ? {
+          cart: state.cart.map((item) => item.id === id ? {
                   ...item,
                   quantity: Math.max(
                     1,

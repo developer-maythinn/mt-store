@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useState } from "react";
+import { useProductById } from "@/hooks/useProductById";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -27,15 +28,16 @@ export default function ProductDetailPage() {
   const [localQty, setLocalQty] = useState<number>(1);
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const {
-    data: product,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => api.getProductById(id),
-    enabled: !!id,
-  });
+  // const {
+  //   data: product,
+  //   isLoading,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["product", id],
+  //   queryFn: () => api.getProductById(id),
+  //   enabled: !!id,
+  // });
+  const { data: product, isLoading, error } = useProductById(id);
 
   if (isLoading) return <LoadingSkeleton />;
   if (error || !product)
