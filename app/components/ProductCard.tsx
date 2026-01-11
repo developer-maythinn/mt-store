@@ -1,23 +1,11 @@
 // components/ProductCard.tsx
 "use client";
-import { useState } from "react";
 import { Product } from "@/types/ecommerce";
 import { useCartStore } from "@/store/useCartStore";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Stack,
-  IconButton,
-  Box,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const [localQty, setLocalQty] = useState<number>(1);
   const addToCart = useCartStore((state) => state.addToCart);
 
   return (
@@ -38,7 +26,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <Button
           variant="contained"
           fullWidth
-          onClick={() => addToCart(product, localQty)}
+          onClick={() => addToCart(product, 1)}
         >
           Add to Cart
         </Button>
